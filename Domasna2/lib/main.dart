@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:home_buddy_app/screens/home.dart';
+import 'package:home_buddy_app/screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Home Buddy',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Home Buddy'),
     );
