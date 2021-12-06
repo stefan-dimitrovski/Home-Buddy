@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>584466056076-7s0aot8mav6q1lm1b4sbc6tn63jeoq0a.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.584466056076-7s0aot8mav6q1lm1b4sbc6tn63jeoq0a</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDFN3072QthXVp7yOZ16s6JrGCc6EWBRbU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>584466056076</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.homeBuddyApp</string>
+	<key>PROJECT_ID</key>
+	<string>home-buddy-24a79</string>
+	<key>STORAGE_BUCKET</key>
+	<string>home-buddy-24a79.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:584466056076:ios:1c711bae7f48383e96cca9</string>
+</dict>
+</plist>
