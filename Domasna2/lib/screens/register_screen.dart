@@ -10,7 +10,7 @@ class RegisterPage extends StatelessWidget {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  late final RegisterViewModel _registerViewModel;
+  late RegisterViewModel _registerViewModel;
 
   Future<bool> _registerUser(BuildContext context) async {
     bool isRegistered = false;
