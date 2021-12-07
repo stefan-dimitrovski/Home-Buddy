@@ -9,17 +9,20 @@ class LoginPage extends StatelessWidget {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  late final LoginViewModel _loginViewModel;
+  late LoginViewModel _loginViewModel;
 
   Future<bool> _loginUser(BuildContext context) async {
-    final email = _emailController.text;
-    final password = _passwordController.text;
+    bool isLoggedIn = false;
 
-    bool isLoggedIn = await _loginViewModel.login(email, password);
-    if (isLoggedIn) {
-      Navigator.pop(context, true);
+    if (_formKey.currentState!.validate()) {
+      final email = _emailController.text;
+      final password = _emailController.text;
+
+      bool isLoggedIn = await _loginViewModel.login(email, password);
+      if (isLoggedIn) {
+        Navigator.pop(context, true);
+      }
     }
-
     return isLoggedIn;
   }
 

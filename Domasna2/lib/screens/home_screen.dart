@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:home_buddy_app/screens/login_screen.dart';
-import 'package:home_buddy_app/screens/register_screen.dart';
-import 'package:home_buddy_app/view_models/login_view_model.dart';
-import 'package:home_buddy_app/view_models/register_view_model.dart';
-import 'package:provider/provider.dart';
+import 'package:home_buddy_app/utilities/app_navigator.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -20,40 +16,22 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _populateAllListings();
   }
-
-  void _populateAllListings() async {}
 
   void _navigateToRegisterPage(BuildContext context) async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ChangeNotifierProvider(
-              create: (context) => RegisterViewModel(), child: RegisterPage()),
-          fullscreenDialog: true),
-    );
+    final bool isRegistered =
+        await AppNavigator.navigateToRegisterPage(context);
+    if (isRegistered) {
+      AppNavigator.navigateToLoginPage(context);
+    }
   }
 
-  void _navigateTLoginPage(BuildContext context) async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ChangeNotifierProvider(
-              create: (context) => LoginViewModel(), child: LoginPage()),
-          fullscreenDialog: true),
-    );
+  void _navigateToLoginPage(BuildContext context) async {
+    _isSignedIn = await AppNavigator.navigateToLoginPage(context);
+    if (_isSignedIn) {
+      AppNavigator.navigateToTestPage(context);
+    }
   }
-
-  // void _navigateToMyListings(BuildContext context) {
-  //   Navigator.push(
-  //       context, MaterialPageRoute(builder: (context) => MyListingsPage()));
-  // }
-
-  // void _navigateToAddListingPage(BuildContext context) async {
-  //   Navigator.push(
-  //       context, MaterialPageRoute(builder: (context) => AddListingPage()));
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               child: const Text('Login'),
               onPressed: () {
-                _navigateTLoginPage(context);
+                _navigateToLoginPage(context);
               },
             ),
           ],
