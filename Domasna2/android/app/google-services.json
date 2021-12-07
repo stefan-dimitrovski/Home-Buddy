@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "584466056076",
+    "project_id": "home-buddy-24a79",
+    "storage_bucket": "home-buddy-24a79.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584466056076:android:75b4ac4c7f242a6096cca9",
+        "android_client_info": {
+          "package_name": "com.example.home_buddy_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "584466056076-m33hilmvb4v4gjl284ps73tn7r96gbui.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCThZC-U5UCdyAlru3xfj5Zgm6ZbZrNM1c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "584466056076-m33hilmvb4v4gjl284ps73tn7r96gbui.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
