@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:home_buddy_app/screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:home_buddy_app/screens/startup_screen.dart';
+import 'package:home_buddy_app/screens/test_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +21,23 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Home Buddy'),
+      home: const Startup(),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return FutureBuilder<FirebaseUser>(
+  //       future: FirebaseAuth.instance.currentUser,
+  //       builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
+  //         if (snapshot.hasData) {
+  //           FirebaseUser user = snapshot.data; // this is your user instance
+  //           /// is because there is user already logged
+  //           return TestWidget();
+  //         }
+
+  //         /// other way there is no user logged.
+  //         return Startup();
+  //       });
+  // }
 }
