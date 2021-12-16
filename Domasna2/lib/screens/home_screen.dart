@@ -1,63 +1,22 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:home_buddy_app/utilities/app_navigator.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  bool _isSignedIn = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void _navigateToRegisterPage(BuildContext context) async {
-    final bool isRegistered =
-        await AppNavigator.navigateToRegisterPage(context);
-    if (isRegistered) {
-      AppNavigator.navigateToLoginPage(context);
-    }
-  }
-
-  void _navigateToLoginPage(BuildContext context) async {
-    _isSignedIn = await AppNavigator.navigateToLoginPage(context);
-    if (_isSignedIn) {
-      AppNavigator.navigateToTestPage(context);
-    }
-  }
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text('Home'),
+        actions: [
+          IconButton(
+            onPressed: () async => {await FirebaseAuth.instance.signOut()},
+            icon: const Icon(Icons.logout),
+          ),
+        ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              child: const Text('Register'),
-              onPressed: () {
-                _navigateToRegisterPage(context);
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Login'),
-              onPressed: () {
-                _navigateToLoginPage(context);
-              },
-            ),
-          ],
-        ),
-      ),
+      body: Container(),
     );
   }
 }

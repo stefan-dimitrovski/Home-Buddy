@@ -69,11 +69,24 @@ class LoginPage extends StatelessWidget {
                     },
                     decoration: const InputDecoration(hintText: "Password"),
                   ),
-                  ElevatedButton(
-                    child: const Text("Login"),
-                    onPressed: () {
-                      _loginUser(context);
-                    },
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    child: Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(40, 0, 40, 20),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _loginUser(context);
+                          },
+                          child: const Text(
+                            'Login',
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                   Text(
                     _loginViewModel.message,
