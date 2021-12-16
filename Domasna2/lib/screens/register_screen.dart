@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:home_buddy_app/view_models/register_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -68,11 +67,24 @@ class RegisterPage extends StatelessWidget {
                   },
                   decoration: const InputDecoration(hintText: "Password"),
                 ),
-                ElevatedButton(
-                  child: const Text("Register"),
-                  onPressed: () {
-                    _registerUser(context);
-                  },
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: Padding(
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(40, 0, 40, 20),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _registerUser(context);
+                        },
+                        child: const Text(
+                          'Register',
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
                 Text(
                   _registerViewModel.message,

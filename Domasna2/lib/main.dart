@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:home_buddy_app/screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:home_buddy_app/screens/startup_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Home Buddy'),
+      home: const Startup(),
     );
   }
 }
