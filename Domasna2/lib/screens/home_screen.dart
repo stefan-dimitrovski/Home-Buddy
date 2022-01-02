@@ -1,17 +1,51 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:home_buddy_app/screens/create_listing_screen.dart';
+import 'package:home_buddy_app/screens/explore_screen.dart';
+import 'package:home_buddy_app/screens/favorites_screen.dart';
+import 'package:home_buddy_app/screens/filter_screen.dart';
 import 'package:home_buddy_app/screens/startup_screen.dart';
+import 'package:home_buddy_app/widgets/drawer.dart';
+import 'package:home_buddy_app/widgets/listings.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  String title;
+  HomePage({Key? key, required this.title}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+  static final List<Widget> _widgetOptions = <Widget>[
+    Listings(),
+    ExploreScreen(),
+    FavoritesScreen(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (_selectedIndex == 1) {
+        widget.title = "Explore";
+      } else if (_selectedIndex == 2) {
+        widget.title = "Favorite";
+      } else {
+        widget.title = "Home";
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: Container(),
+      drawer: const Drawer(
+        child: DrawerApp(),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_rounded),
@@ -28,15 +62,29 @@ class HomePage extends StatelessWidget {
         ],
       ),
       appBar: AppBar(
-        title: const Text('Explore'),
+        title: Text(widget.title),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_alt_outlined),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Filter(),
+                ),
+              );
+            },
           ),
           IconButton(
             icon: const Icon(Icons.add_box_outlined),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreateListing(),
+                ),
+              );
+            },
           ),
           IconButton(
             onPressed: () async => {
@@ -48,83 +96,7 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      //TODO: Create a seperate widget for this
-      body: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) => ListTile(
-          onTap: () {
-            print(index);
-          },
-          title: Card(
-            elevation: 5,
-            child: Container(
-              width: double.infinity,
-              height: 160,
-              margin: const EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.room_outlined,
-                            color: Colors.black45,
-                          ),
-                          Text('London'),
-                        ],
-                      ),
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.apartment_outlined,
-                            color: Colors.black45,
-                          ),
-                          Text('Apartment'),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Center(
-                    child: Container(
-                        margin: const EdgeInsets.all(8),
-                        width: double.infinity,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.network(
-                            'https://picsum.photos/500?image=$index',
-                            fit: BoxFit.cover,
-                            width: 200,
-                            height: 100,
-                          ),
-                        )),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: const [
-                          Text("\$205"),
-                          Text('/ night'),
-                        ],
-                      ),
-                      Row(
-                        children: const [
-                          Text(
-                            '1 bed • 1 bath',
-                            style: TextStyle(color: Colors.black26),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+      body: _widgetOptions.elementAt(_selectedIndex),
     );
   }
 }

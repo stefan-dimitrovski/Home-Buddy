@@ -37,7 +37,9 @@ class AppNavigator {
     return await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const HomePage(),
+        builder: (context) => HomePage(
+          title: 'Home',
+        ),
       ),
     );
   }

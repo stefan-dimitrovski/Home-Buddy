@@ -20,7 +20,9 @@ class _StartupState extends State<Startup> {
     if (user != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const HomePage(),
+          builder: (context) => HomePage(
+            title: 'Home',
+          ),
         ),
       );
     }
