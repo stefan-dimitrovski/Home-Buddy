@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:home_buddy_app/screens/startup_screen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -38,7 +39,11 @@ class HomePage extends StatelessWidget {
             onPressed: () {},
           ),
           IconButton(
-            onPressed: () async => {await FirebaseAuth.instance.signOut()},
+            onPressed: () async => {
+              await FirebaseAuth.instance.signOut(),
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const Startup())),
+            },
             icon: const Icon(Icons.logout),
           ),
         ],
@@ -47,6 +52,9 @@ class HomePage extends StatelessWidget {
       body: ListView.builder(
         itemCount: 10,
         itemBuilder: (context, index) => ListTile(
+          onTap: () {
+            print(index);
+          },
           title: Card(
             elevation: 5,
             child: Container(
