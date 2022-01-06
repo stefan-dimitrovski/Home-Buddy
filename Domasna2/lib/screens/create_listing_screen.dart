@@ -159,7 +159,7 @@ class _CreateListingState extends State<CreateListing> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: 300,
+                      width: 270,
                       child: TextFormField(
                         maxLines: null,
                         controller: myLocationController,
@@ -216,12 +216,12 @@ class _CreateListingState extends State<CreateListing> {
                 child: const AmenitiesList(),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(15, 0, 220, 5),
+                padding: const EdgeInsets.fromLTRB(15, 0, 150, 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: 100,
+                      width: 120,
                       child: TextFormField(
                         controller: myPriceController,
                         decoration: const InputDecoration(
