@@ -66,6 +66,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_alt_outlined),
+            tooltip: "Filter",
             onPressed: () {
               Navigator.push(
                 context,
@@ -77,6 +78,7 @@ class _HomePageState extends State<HomePage> {
           ),
           IconButton(
             icon: const Icon(Icons.add_box_outlined),
+            tooltip: "Create Listing",
             onPressed: () {
               Navigator.push(
                 context,
@@ -87,6 +89,7 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           IconButton(
+            tooltip: "Logout",
             onPressed: () async => {
               await FirebaseAuth.instance.signOut(),
               Navigator.pushReplacement(context,
