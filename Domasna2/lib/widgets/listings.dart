@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Listings extends StatefulWidget {
-  Listings({Key? key}) : super(key: key);
+  const Listings({Key? key}) : super(key: key);
 
   @override
   _ListingsState createState() => _ListingsState();
@@ -17,7 +17,7 @@ class _ListingsState extends State<Listings> {
           elevation: 5,
           child: InkWell(
             onTap: () {
-              print("tapped $index");
+              // print("tapped $index");
             },
             child: Container(
               width: double.infinity,

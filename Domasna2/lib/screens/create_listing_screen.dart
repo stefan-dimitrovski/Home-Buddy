@@ -46,12 +46,12 @@ class _CreateListingState extends State<CreateListing> {
     }
 
     _locationData = await location.getLocation();
-    print(_locationData);
+    // print(_locationData);
 
     List<Placemark> placemark = await placemarkFromCoordinates(
         _locationData.latitude!, _locationData.longitude!);
 
-    print(placemark);
+    // print(placemark);
     myLocationController.text =
         "${placemark[0].street}, ${placemark[0].country}, ${placemark[0].locality} , ${placemark[0].postalCode}";
   }
@@ -213,7 +213,7 @@ class _CreateListingState extends State<CreateListing> {
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                 height: 100,
-                child: AmenitiesList(),
+                child: const AmenitiesList(),
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 0, 220, 5),
@@ -260,7 +260,7 @@ class _CreateListingState extends State<CreateListing> {
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                 height: 150,
-                child: PictureUploads(),
+                child: const PictureUploads(),
               ),
             ],
           ),

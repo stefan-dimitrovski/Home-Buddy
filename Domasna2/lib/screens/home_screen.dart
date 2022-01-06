@@ -19,9 +19,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
-    Listings(),
-    ExploreScreen(),
-    FavoritesScreen(),
+    const Listings(),
+    const ExploreScreen(),
+    const FavoritesScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Filter(),
+                  builder: (context) => const Filter(),
                 ),
               );
             },

@@ -20,7 +20,7 @@ class _AmenityState extends State<Amenity> {
         setState(() {
           isSelected = !isSelected;
         });
-        print('Tapped ${widget.title}');
+        // print('Tapped ${widget.title}');
       },
       borderRadius: BorderRadius.circular(10),
       child: Container(

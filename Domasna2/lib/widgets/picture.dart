@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Picture extends StatefulWidget {
-  Picture({Key? key}) : super(key: key);
+  const Picture({Key? key}) : super(key: key);
 
   @override
   _PictureState createState() => _PictureState();
