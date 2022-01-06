@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart' hide Location;
 import 'package:home_buddy_app/widgets/amenities_list.dart';
 import 'package:home_buddy_app/widgets/pictures_list.dart';
+import 'package:location/location.dart';
 
 class CreateListing extends StatefulWidget {
   CreateListing({Key? key}) : super(key: key);
@@ -19,6 +21,39 @@ class _CreateListingState extends State<CreateListing> {
 
   _createListing() {
     //TODO: Create listing in firebase
+  }
+
+  _getLocation() async {
+    Location location = Location();
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+    print(_locationData);
+
+    List<Placemark> placemark = await placemarkFromCoordinates(
+        _locationData.latitude!, _locationData.longitude!);
+
+    print(placemark);
+    myLocationController.text =
+        "${placemark[0].street}, ${placemark[0].country}, ${placemark[0].locality} , ${placemark[0].postalCode}";
   }
 
   @override
@@ -119,13 +154,14 @@ class _CreateListingState extends State<CreateListing> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(15, 5, 17, 5),
+                padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
                       width: 300,
                       child: TextFormField(
+                        maxLines: null,
                         controller: myLocationController,
                         decoration: const InputDecoration(
                           labelText: 'Location',
@@ -137,7 +173,7 @@ class _CreateListingState extends State<CreateListing> {
                       icon: const Icon(Icons.my_location),
                       tooltip: "Get current location",
                       onPressed: () {
-                        myLocationController.text = "Skopje";
+                        _getLocation();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             duration: Duration(seconds: 1),
