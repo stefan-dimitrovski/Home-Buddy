@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_buddy_app/screens/details_screen.dart';
 
 class Listings extends StatefulWidget {
   const Listings({Key? key}) : super(key: key);
@@ -18,6 +19,14 @@ class _ListingsState extends State<Listings> {
           child: InkWell(
             onTap: () {
               // print("tapped $index");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return Details();
+                  },
+                ),
+              );
             },
             child: Container(
               width: double.infinity,

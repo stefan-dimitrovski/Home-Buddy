@@ -23,6 +23,8 @@ dependencies:
   intl: ^0.17.0
   location: ^4.2.0
   geocoding: ^2.0.1
+  carousel_slider: ^4.0.0
+  photo_view: ^0.13.0
 
 dev_dependencies:
   flutter_test:

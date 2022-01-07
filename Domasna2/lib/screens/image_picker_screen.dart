@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:home_buddy_app/screens/image_view_screen.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageSelect extends StatefulWidget {
@@ -60,7 +61,7 @@ class _ImageSelectState extends State<ImageSelect> {
         Row(
           children: [
             Container(
-              margin: const EdgeInsets.only(right: 10),
+              margin: const EdgeInsets.only(right: 15),
               width: 60,
               child: ElevatedButton(
                 onPressed: () => _onImageButtonPressed(ImageSource.gallery,
@@ -81,8 +82,9 @@ class _ImageSelectState extends State<ImageSelect> {
           ],
         ),
         _imageFileList != null
-            ? SizedBox(
-                height: MediaQuery.of(context).size.height / 3,
+            ? Container(
+                margin: const EdgeInsets.only(top: 15),
+                height: MediaQuery.of(context).size.height / 5,
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -93,21 +95,28 @@ class _ImageSelectState extends State<ImageSelect> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ImageView(
-                              imageFile: _imageFileList![index],
+                            builder: (context) => ImageViewer(
+                              imageFile: _imageFileList![index].path,
                             ),
                           ),
                         );
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         margin: const EdgeInsets.only(right: 10),
-                        child: Image.file(
-                          File(_imageFileList![index].path),
-                          fit: BoxFit.fill,
-                          width: 250,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(3),
+                          child: Image.file(
+                            File(_imageFileList![index].path),
+                            fit: BoxFit.cover,
+                            width: 150,
+                          ),
                         ),
                       ),
                     );
@@ -186,33 +195,5 @@ class _ImageSelectState extends State<ImageSelect> {
       return result;
     }
     return null;
-  }
-}
-
-class ImageView extends StatefulWidget {
-  var imageFile;
-
-  ImageView({Key? key, required this.imageFile}) : super(key: key);
-
-  @override
-  _ImageViewState createState() => _ImageViewState();
-}
-
-class _ImageViewState extends State<ImageView> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Image View'),
-      ),
-      body: Center(
-        child: Image.file(
-          File(
-            widget.imageFile.path,
-          ),
-          fit: BoxFit.fill,
-        ),
-      ),
-    );
   }
 }

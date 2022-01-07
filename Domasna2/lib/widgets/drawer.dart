@@ -22,11 +22,6 @@ class DrawerApp extends StatelessWidget {
         ),
         ListTile(
           onTap: () {},
-          leading: const Icon(Icons.message),
-          title: const Text('Messages'),
-        ),
-        ListTile(
-          onTap: () {},
           leading: const Icon(Icons.account_circle),
           title: const Text('Profile'),
         ),
