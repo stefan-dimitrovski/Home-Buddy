@@ -66,6 +66,9 @@ class _CreateListingState extends State<CreateListing> {
     super.dispose();
   }
 
+  //TODO: Add bath and bed count
+  //TODO: Add amenities
+  //TODO: Add type picker
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,6 +116,7 @@ class _CreateListingState extends State<CreateListing> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              //TITLE
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                 child: TextFormField(
@@ -134,6 +138,7 @@ class _CreateListingState extends State<CreateListing> {
                   },
                 ),
               ),
+              //PHONE
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                 child: TextFormField(
@@ -153,6 +158,7 @@ class _CreateListingState extends State<CreateListing> {
                   },
                 ),
               ),
+              //LOCATION
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
                 child: Row(
@@ -185,6 +191,7 @@ class _CreateListingState extends State<CreateListing> {
                   ],
                 ),
               ),
+              //DESCRIPTION
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
                 child: TextFormField(
@@ -200,6 +207,7 @@ class _CreateListingState extends State<CreateListing> {
                   },
                 ),
               ),
+              //AMENITIES
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                 child: const Text(
@@ -215,6 +223,7 @@ class _CreateListingState extends State<CreateListing> {
                 height: 100,
                 child: const AmenitiesList(),
               ),
+              //PRICE
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 0, 150, 5),
                 child: Row(
@@ -247,6 +256,7 @@ class _CreateListingState extends State<CreateListing> {
                   ],
                 ),
               ),
+              //IMAGES
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
                 child: const Text(
