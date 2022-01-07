@@ -16,9 +16,7 @@ class _PictureUploadsState extends State<PictureUploads> {
       children: const <Widget>[
         SizedBox(
           width: 150.0,
-          child: Picture(
-              // image: 'assets/images/image1.jpg',
-              ),
+          child: Picture(),
         ),
         SizedBox(
           width: 150.0,

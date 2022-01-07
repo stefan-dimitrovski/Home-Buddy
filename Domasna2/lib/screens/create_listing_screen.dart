@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' hide Location;
+import 'package:home_buddy_app/screens/image_picker_screen.dart';
 import 'package:home_buddy_app/widgets/amenities_list.dart';
-import 'package:home_buddy_app/widgets/pictures_list.dart';
 import 'package:location/location.dart';
 
 class CreateListing extends StatefulWidget {
@@ -259,8 +259,7 @@ class _CreateListingState extends State<CreateListing> {
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                height: 150,
-                child: const PictureUploads(),
+                child: const ImageSelect(),
               ),
             ],
           ),
