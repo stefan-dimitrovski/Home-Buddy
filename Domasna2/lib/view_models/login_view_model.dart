@@ -19,7 +19,7 @@ class LoginViewModel extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print(e);
+      // print(e);
     }
     return isLoggedIn;
   }

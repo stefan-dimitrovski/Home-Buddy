@@ -23,7 +23,7 @@ class RegisterViewModel extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print(e);
+      // print(e);
     }
     return isRegistered;
   }
