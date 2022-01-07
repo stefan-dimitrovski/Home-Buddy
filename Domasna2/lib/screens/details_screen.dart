@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:home_buddy_app/models/listing_model.dart';
 import 'package:home_buddy_app/widgets/amenities_list.dart';
 import 'package:home_buddy_app/widgets/image_carousel.dart';
 import 'package:home_buddy_app/widgets/map.dart';
 
-final List<String> imgList = [
-  'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-  'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-  'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
-  'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
-  'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
-];
-
 class Details extends StatefulWidget {
-  Details({Key? key}) : super(key: key);
+  Listing listing;
+  Details({Key? key, required this.listing}) : super(key: key);
 
   @override
   _DetailsState createState() => _DetailsState();
@@ -55,7 +48,7 @@ class _DetailsState extends State<Details> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Carousel(),
+            Carousel(listing: widget.listing),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -64,11 +57,11 @@ class _DetailsState extends State<Details> {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(16),
-                      child: const Text('Title'),
+                      child: Text(widget.listing.title),
                     ),
                     Container(
                       padding: const EdgeInsets.all(16),
-                      child: const Text('Price'),
+                      child: Text(widget.listing.price.toString()),
                     ),
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -82,15 +75,21 @@ class _DetailsState extends State<Details> {
                     ),
                     Container(
                       padding: const EdgeInsets.all(10),
-                      child: const Text('Street'),
+                      child: Text(widget.listing.address.street),
                     ),
                     Container(
                       padding: const EdgeInsets.all(10),
-                      child: const Text('City'),
+                      child: Text(widget.listing.address.city),
                     ),
                     Container(
                       padding: const EdgeInsets.all(10),
-                      child: const Text('Country'),
+                      child: Text(widget.listing.address.country),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      child: Map(
+                        listing: widget.listing,
+                      ),
                     ),
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -104,7 +103,7 @@ class _DetailsState extends State<Details> {
                     ),
                     Container(
                       padding: const EdgeInsets.all(10),
-                      child: const Text('Phone'),
+                      child: Text(widget.listing.phone),
                     ),
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -118,7 +117,7 @@ class _DetailsState extends State<Details> {
                     ),
                     Container(
                       padding: const EdgeInsets.all(10),
-                      child: const Text('Description'),
+                      child: Text(widget.listing.description),
                     ),
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -131,11 +130,6 @@ class _DetailsState extends State<Details> {
                       ),
                     ),
                   ],
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 50, bottom: 120),
-                  padding: const EdgeInsets.all(16),
-                  child: Map(),
                 ),
               ],
             ),

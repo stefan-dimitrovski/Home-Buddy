@@ -3,8 +3,8 @@ class Address {
   String country;
   String city;
   String zipcode;
-  String lat;
-  String long;
+  double lat;
+  double lng;
 
   Address({
     required this.street,
@@ -12,7 +12,7 @@ class Address {
     required this.city,
     required this.zipcode,
     required this.lat,
-    required this.long,
+    required this.lng,
   });
 
   String getStreet() {
@@ -31,12 +31,12 @@ class Address {
     return zipcode;
   }
 
-  String getLat() {
+  double getLat() {
     return lat;
   }
 
-  String getLong() {
-    return long;
+  double getLng() {
+    return lng;
   }
 
   factory Address.fromJson(Map<String, dynamic> json) => Address(
@@ -45,7 +45,7 @@ class Address {
         city: json["city"],
         zipcode: json["zipcode"],
         lat: json["lat"],
-        long: json["long"],
+        lng: json["lng"],
       );
 
   Map<String, dynamic> toJson() {
@@ -55,7 +55,7 @@ class Address {
     data['city'] = city;
     data['zipcode'] = zipcode;
     data['lat'] = lat;
-    data['long'] = long;
+    data['lng'] = lng;
     return data;
   }
 }

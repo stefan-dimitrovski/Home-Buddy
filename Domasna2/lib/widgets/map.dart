@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:home_buddy_app/models/listing_model.dart';
 import 'package:home_buddy_app/screens/map_screen.dart';
+import 'package:latlong2/latlong.dart';
 
 class Map extends StatefulWidget {
-  Map({Key? key}) : super(key: key);
+  Listing listing;
+  Map({Key? key, required this.listing}) : super(key: key);
 
   @override
   _MapState createState() => _MapState();
@@ -13,7 +16,7 @@ class _MapState extends State<Map> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Container(
+        SizedBox(
           height: 120,
           width: 170,
           child: Image.network(
@@ -37,10 +40,12 @@ class _MapState extends State<Map> {
               ),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return MapView();
+                  return MapView(
+                      coordinates: LatLng(widget.listing.address.lat,
+                          widget.listing.address.lng));
                 }));
               },
-              child: Text('Show Map'),
+              child: const Text('Show Map'),
             ),
           ),
         ),

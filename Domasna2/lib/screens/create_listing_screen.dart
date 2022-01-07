@@ -67,7 +67,6 @@ class _CreateListingState extends State<CreateListing> {
   }
 
   //TODO: Add bath and bed count
-  //TODO: Add amenities
   //TODO: Add type picker
   @override
   Widget build(BuildContext context) {

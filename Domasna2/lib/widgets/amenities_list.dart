@@ -14,7 +14,6 @@ class _AmenitiesListState extends State<AmenitiesList> {
     return ListView(
       scrollDirection: Axis.horizontal,
       children: const <Widget>[
-        //TODO: Add amenities
         SizedBox(
           width: 100.0,
           child: Amenity(
