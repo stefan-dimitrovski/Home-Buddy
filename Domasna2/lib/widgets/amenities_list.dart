@@ -18,7 +18,7 @@ class _AmenitiesListState extends State<AmenitiesList> {
           width: 100.0,
           child: Amenity(
             icon: Icons.wifi,
-            title: 'Wi-Fi',
+            title: 'Wifi',
           ),
         ),
         SizedBox(
@@ -47,6 +47,48 @@ class _AmenitiesListState extends State<AmenitiesList> {
           child: Amenity(
             icon: Icons.tv,
             title: 'TV',
+          ),
+        ),
+        SizedBox(
+          width: 100.0,
+          child: Amenity(
+            icon: Icons.bathroom,
+            title: 'Bathroom',
+          ),
+        ),
+        SizedBox(
+          width: 100.0,
+          child: Amenity(
+            icon: Icons.local_hotel,
+            title: 'Bedroom',
+          ),
+        ),
+        SizedBox(
+          width: 100.0,
+          child: Amenity(
+            icon: Icons.kitchen,
+            title: 'Fridge',
+          ),
+        ),
+        SizedBox(
+          width: 100.0,
+          child: Amenity(
+            icon: Icons.fitness_center,
+            title: 'Gym',
+          ),
+        ),
+        SizedBox(
+          width: 100.0,
+          child: Amenity(
+            icon: Icons.pool,
+            title: 'Pool',
+          ),
+        ),
+        SizedBox(
+          width: 100.0,
+          child: Amenity(
+            icon: Icons.elevator,
+            title: 'Elevator',
           ),
         ),
       ],

@@ -61,7 +61,7 @@ class _DetailsState extends State<Details> {
                     ),
                     Container(
                       padding: const EdgeInsets.all(16),
-                      child: Text(widget.listing.price.toString()),
+                      child: Text("\$${widget.listing.price} / night"),
                     ),
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -116,8 +116,12 @@ class _DetailsState extends State<Details> {
                       ),
                     ),
                     Container(
+                      width: MediaQuery.of(context).size.width * 1,
                       padding: const EdgeInsets.all(10),
-                      child: Text(widget.listing.description),
+                      child: Text(
+                        widget.listing.description,
+                        textAlign: TextAlign.justify,
+                      ),
                     ),
                     Container(
                       padding: const EdgeInsets.all(16),

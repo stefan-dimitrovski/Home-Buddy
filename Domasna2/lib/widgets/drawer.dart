@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_buddy_app/screens/profile_screen.dart';
 
 class DrawerApp extends StatelessWidget {
   const DrawerApp({Key? key}) : super(key: key);
@@ -21,7 +22,10 @@ class DrawerApp extends StatelessWidget {
           ),
         ),
         ListTile(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Profile()));
+          },
           leading: const Icon(Icons.account_circle),
           title: const Text('Profile'),
         ),

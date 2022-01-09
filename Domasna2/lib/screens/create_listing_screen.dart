@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' hide Location;
 import 'package:home_buddy_app/screens/image_picker_screen.dart';
@@ -18,9 +20,31 @@ class _CreateListingState extends State<CreateListing> {
   final myLocationController = TextEditingController();
   final myDescriptionController = TextEditingController();
   final myPriceController = TextEditingController();
+  int _categorySelected = -1;
+  int _bedrooms = 0;
+  int _bathrooms = 0;
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   _createListing() {
-    //TODO: Create listing in firebase
+    //TODO: FINISH THIS
+    firestore.collection('listings').add({
+      'title': myTitleController.text,
+      'phone': myPhoneController.text,
+      'location': myLocationController.text,
+      'description': myDescriptionController.text,
+      'price': myPriceController.text,
+      'category': _categorySelected,
+      'bedrooms': _bedrooms,
+      'bathrooms': _bathrooms,
+      'amenities': [],
+      'images': [],
+      'owner': auth.currentUser?.uid,
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+
+    Navigator.pop(context);
   }
 
   _getLocation() async {
@@ -66,8 +90,6 @@ class _CreateListingState extends State<CreateListing> {
     super.dispose();
   }
 
-  //TODO: Add bath and bed count
-  //TODO: Add type picker
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,13 +116,6 @@ class _CreateListingState extends State<CreateListing> {
                       content: Text('Processing...'),
                     ),
                   );
-                  Navigator.pop(context, {
-                    'title': myTitleController.text,
-                    'phone': myPhoneController.text,
-                    'location': myLocationController.text,
-                    'description': myDescriptionController.text,
-                    'price': myPriceController.text,
-                  });
                 }
               } else {
                 return;
@@ -204,6 +219,120 @@ class _CreateListingState extends State<CreateListing> {
                     }
                     return null;
                   },
+                ),
+              ),
+              //BATHROOMS AND BEDROOMS COUNT
+              Container(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const Text("Bedrooms"),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.remove),
+                              onPressed: () {
+                                setState(() {
+                                  if (_bedrooms > 0) {
+                                    _bedrooms--;
+                                  }
+                                });
+                              },
+                            ),
+                            Text(_bedrooms.toString()),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: () {
+                                setState(() {
+                                  _bedrooms++;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const Text("Bathrooms"),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.remove),
+                              onPressed: () {
+                                setState(() {
+                                  if (_bathrooms > 0) {
+                                    _bathrooms--;
+                                  }
+                                });
+                              },
+                            ),
+                            Text(_bathrooms.toString()),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: () {
+                                setState(() {
+                                  _bathrooms++;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              //TYPE OF PROPERTY
+              Container(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ChoiceChip(
+                      clipBehavior: Clip.hardEdge,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      label: const Text("House"),
+                      selected: _categorySelected == 0,
+                      onSelected: (value) {
+                        setState(() {
+                          _categorySelected = value ? 0 : -1;
+                        });
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    ChoiceChip(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      label: const Text('Villa'),
+                      selected: _categorySelected == 1,
+                      onSelected: (value) {
+                        setState(() {
+                          _categorySelected = value ? 1 : -1;
+                        });
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    ChoiceChip(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      label: const Text('Apartment'),
+                      selected: _categorySelected == 2,
+                      onSelected: (value) {
+                        setState(() {
+                          _categorySelected = value ? 2 : -1;
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ),
               //AMENITIES

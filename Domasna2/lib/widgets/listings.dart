@@ -5,28 +5,28 @@ import 'package:home_buddy_app/models/listing_type.dart';
 import 'package:home_buddy_app/screens/details_screen.dart';
 
 final List<String> imgList = [
-  'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80',
-  'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-  'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-  'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
-  'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
+  'https://news.airbnb.com/wp-content/uploads/sites/4/2019/06/PJM020719Q202_Luxe_WanakaNZ_LivingRoom_0264-LightOn_R1.jpg?fit=2500%2C1666',
+  'https://media.cntraveler.com/photos/5d112d50c4d7bd806dbc00a4/3:2/w_2250,h_1500,c_limit/airbnb%20luxe.jpg',
+  'https://thejetset.com/wp-content/uploads/2021/12/airbnb-new-years-eve-party.jpg',
+  'https://media.cntraveler.com/photos/5ea354e75e5dc70008d054b9/16:9/w_2560%2Cc_limit/24912891-australia-3.jpg',
+  'https://www.fodors.com/wp-content/uploads/2019/08/airbnb-hero-.jpg',
+  'https://www.gannett-cdn.com/presto/2021/06/09/USAT/036e5af9-e33d-412a-ad2e-709666d5cd4f-Live_Anywhere_Airbnb_11.jpg',
 ];
 
 class Listings extends StatefulWidget {
   var listing = Listing(
       "1",
-      "Awesome place to rest",
+      "Cozy cottages near Skadar Lake 1",
       "0771234567",
       Address(
           street: "123 Fake Street",
-          country: "United Kingdom",
-          city: "London",
+          country: "Serbia",
+          city: "Zlatibor",
           zipcode: "SW1A 1AA",
-          lat: 45.72021,
-          lng: 99.66472),
-      "Intresting place",
-      50,
+          lat: 43.722597,
+          lng: 19.703932),
+      "Bungalows are located on the old road of King Nikola, from Virpazar to Crnojevica River. The cottages are located 15km from the airport (15 min drive), 15km from the sea (15 min drive) and 5km from Lake Skadar. Around the bungalows there is a place to relax, a place to barbecue and a small summer house exclusively for guests, a garden, a vineyard and a beehive. The bungalows are located on the Dabovic family estate, which has been producing domestic wine, honey and brandy for years. Guests will be able to enjoy our products.",
+      45,
       imgList,
       ListingType.apartment,
       2,
