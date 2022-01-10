@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' hide Location;
+import 'package:home_buddy_app/models/address_model.dart';
+import 'package:home_buddy_app/models/listing_model.dart';
+import 'package:home_buddy_app/models/listing_type.dart';
 import 'package:home_buddy_app/screens/image_picker_screen.dart';
 import 'package:home_buddy_app/widgets/amenities_list.dart';
 import 'package:location/location.dart';
@@ -24,60 +28,92 @@ class _CreateListingState extends State<CreateListing> {
   int _bedrooms = 0;
   int _bathrooms = 0;
 
+  final Location _location = Location();
+  late List<Placemark> _placemark;
+  late LocationData _locationData;
+
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  _createListing() {
-    //TODO: FINISH THIS
-    firestore.collection('listings').add({
-      'title': myTitleController.text,
-      'phone': myPhoneController.text,
-      'location': myLocationController.text,
-      'description': myDescriptionController.text,
-      'price': myPriceController.text,
-      'category': _categorySelected,
-      'bedrooms': _bedrooms,
-      'bathrooms': _bathrooms,
-      'amenities': [],
-      'images': [],
-      'owner': auth.currentUser?.uid,
-      'createdAt': FieldValue.serverTimestamp(),
-    });
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  _createListing() async {
+    //Refactor firebase with singleton
+    //TODO: Finish image storage and fix amenities
+
+    final listingsRef = firestore.collection('listings').withConverter<Listing>(
+          fromFirestore: (snapshot, _) => Listing.fromJson(snapshot.data()!),
+          toFirestore: (listing, _) => listing.toJson(),
+        );
+
+    await listingsRef.add(Listing(
+      title: myTitleController.text,
+      phone: myPhoneController.text,
+      description: myDescriptionController.text,
+      price: double.parse(myPriceController.text),
+      category: ListingType.values[_categorySelected],
+      bedrooms: _bedrooms,
+      bathrooms: _bathrooms,
+      images: [],
+      address: Address(
+        street: _placemark[0].street!,
+        city: _placemark[0].locality!,
+        lat: _locationData.latitude!,
+        lng: _locationData.longitude!,
+        country: _placemark[0].country!,
+        zipcode: _placemark[0].postalCode!,
+      ),
+      owner: auth.currentUser!.uid,
+    ));
+
+    // .then((doc) => {
+    //       //upload images
+    //       storage.ref().child('listings/${doc.id}').listAll().then((list) {
+    //         for (var i = 0; i < list.items.length; i++) {
+    //           list.items[i].getDownloadURL().then((url) {
+    //             firestore.collection('listings').doc(doc.id).update({
+    //               'images': FieldValue.arrayUnion([url]),
+    //             });
+    //           });
+    //         }
+    //       }),
+    //     });
 
     Navigator.pop(context);
   }
 
   _getLocation() async {
-    Location location = Location();
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
-    LocationData _locationData;
 
-    _serviceEnabled = await location.serviceEnabled();
+    _serviceEnabled = await _location.serviceEnabled();
     if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
+      _serviceEnabled = await _location.requestService();
       if (!_serviceEnabled) {
         return;
       }
     }
 
-    _permissionGranted = await location.hasPermission();
+    _permissionGranted = await _location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
+      _permissionGranted = await _location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
         return;
       }
     }
 
-    _locationData = await location.getLocation();
-    // print(_locationData);
+    _locationData = await _location.getLocation();
 
-    List<Placemark> placemark = await placemarkFromCoordinates(
+    _placemark = await placemarkFromCoordinates(
         _locationData.latitude!, _locationData.longitude!);
 
-    // print(placemark);
     myLocationController.text =
-        "${placemark[0].street}, ${placemark[0].country}, ${placemark[0].locality} , ${placemark[0].postalCode}";
+        "${_placemark[0].street}, ${_placemark[0].country}, ${_placemark[0].locality} , ${_placemark[0].postalCode}";
   }
 
   @override
@@ -342,7 +378,7 @@ class _CreateListingState extends State<CreateListing> {
                   "Amenities:",
                   style: TextStyle(
                     fontSize: 15,
-                    color: Colors.grey,
+                    color: Colors.black54,
                   ),
                 ),
               ),
@@ -391,7 +427,7 @@ class _CreateListingState extends State<CreateListing> {
                   "Pictures:",
                   style: TextStyle(
                     fontSize: 15,
-                    color: Colors.grey,
+                    color: Colors.black54,
                   ),
                 ),
               ),

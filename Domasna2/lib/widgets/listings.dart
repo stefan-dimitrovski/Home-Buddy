@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:home_buddy_app/models/address_model.dart';
 import 'package:home_buddy_app/models/listing_model.dart';
 import 'package:home_buddy_app/models/listing_type.dart';
 import 'package:home_buddy_app/screens/details_screen.dart';
@@ -14,24 +14,6 @@ final List<String> imgList = [
 ];
 
 class Listings extends StatefulWidget {
-  var listing = Listing(
-      "1",
-      "Cozy cottages near Skadar Lake 1",
-      "0771234567",
-      Address(
-          street: "123 Fake Street",
-          country: "Serbia",
-          city: "Zlatibor",
-          zipcode: "SW1A 1AA",
-          lat: 43.722597,
-          lng: 19.703932),
-      "Bungalows are located on the old road of King Nikola, from Virpazar to Crnojevica River. The cottages are located 15km from the airport (15 min drive), 15km from the sea (15 min drive) and 5km from Lake Skadar. Around the bungalows there is a place to relax, a place to barbecue and a small summer house exclusively for guests, a garden, a vineyard and a beehive. The bungalows are located on the Dabovic family estate, which has been producing domestic wine, honey and brandy for years. Guests will be able to enjoy our products.",
-      45,
-      imgList,
-      ListingType.apartment,
-      2,
-      3);
-
   Listings({Key? key}) : super(key: key);
 
   @override
@@ -39,90 +21,128 @@ class Listings extends StatefulWidget {
 }
 
 class _ListingsState extends State<Listings> {
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  List<QueryDocumentSnapshot<Listing>> listings = [];
+
+  //this is bad practice, it needs refactoring
+  //TODO: persist this data in the database
+  @override
+  void initState() {
+    super.initState();
+    final listingsRef = firestore.collection('listings').withConverter<Listing>(
+          fromFirestore: (snapshot, _) => Listing.fromJson(snapshot.data()!),
+          toFirestore: (listing, _) => listing.toJson(),
+        );
+
+    listingsRef.get().then((value) => value.docs).then((value) {
+      setState(() {
+        listings = value;
+      });
+    });
+  }
+
+  _getListings() async {
+    final listingsRef = firestore.collection('listings').withConverter<Listing>(
+          fromFirestore: (snapshot, _) => Listing.fromJson(snapshot.data()!),
+          toFirestore: (listing, _) => listing.toJson(),
+        );
+
+    listings = await listingsRef.get().then((value) => value.docs);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 1,
-      itemBuilder: (context, index) => ListTile(
-        title: Card(
-          elevation: 5,
-          child: InkWell(
-            onTap: () {
-              // print("tapped $index");
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return Details(
-                      listing: widget.listing,
-                    );
-                  },
-                ),
-              );
-            },
-            child: Container(
-              width: double.infinity,
-              height: 160,
-              margin: const EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.room_outlined,
-                            color: Colors.black45,
-                          ),
-                          Text(widget.listing.address.city),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.apartment_outlined,
-                            color: Colors.black45,
-                          ),
-                          Text(widget.listing.type.toShortString()),
-                        ],
-                      ),
-                    ],
+    return RefreshIndicator(
+      onRefresh: () async {
+        await _getListings();
+        setState(() {});
+      },
+      child: ListView.builder(
+        itemCount: listings.length,
+        itemBuilder: (context, index) => ListTile(
+          title: Card(
+            elevation: 5,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return Details(
+                        listing: listings[index].data(),
+                      );
+                    },
                   ),
-                  Center(
-                    child: Container(
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                height: 160,
+                margin: const EdgeInsets.all(8),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.room_outlined,
+                              color: Colors.black45,
+                            ),
+                            Text(listings[index].data().title),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.apartment_outlined,
+                              color: Colors.black45,
+                            ),
+                            Text(listings[index]
+                                .data()
+                                .category
+                                .toShortString()),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Center(
+                      child: Container(
                         margin: const EdgeInsets.all(8),
                         width: double.infinity,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8.0),
                           child: Image.network(
-                            widget.listing.getImages[0],
+                            imgList[0],
                             fit: BoxFit.cover,
                             width: 200,
                             height: 100,
                           ),
-                        )),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text("\$${widget.listing.price}"),
-                          const Text('/ night'),
-                        ],
+                        ),
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            '${widget.listing.bedrooms} bed • ${widget.listing.bathrooms} bath',
-                            style: const TextStyle(color: Colors.black26),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text("\$${listings[index].data().price}"),
+                            const Text('/ night'),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '${listings[index].data().bedrooms} bed • ${listings[index].data().bathrooms} bath',
+                              style: const TextStyle(color: Colors.black26),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
