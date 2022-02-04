@@ -16,7 +16,7 @@ class _MapViewState extends State<MapView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MapView'),
+        title: const Text('Map'),
       ),
       body: FlutterMap(
         options: MapOptions(
@@ -24,6 +24,7 @@ class _MapViewState extends State<MapView> {
               LatLng(widget.coordinates.latitude, widget.coordinates.longitude),
           zoom: 15,
           maxZoom: 18,
+          interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
         ),
         layers: [
           TileLayerOptions(
@@ -38,15 +39,16 @@ class _MapViewState extends State<MapView> {
                 point: LatLng(
                     widget.coordinates.latitude, widget.coordinates.longitude),
                 builder: (ctx) => IconButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Item clicked")));
-                    },
-                    icon: const Icon(
-                      Icons.location_on,
-                      color: Colors.red,
-                      size: 50.0,
-                    )),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Item clicked")));
+                  },
+                  icon: const Icon(
+                    Icons.location_on,
+                    color: Colors.red,
+                    size: 50.0,
+                  ),
+                ),
               ),
             ],
           ),
