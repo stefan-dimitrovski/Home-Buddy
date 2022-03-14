@@ -1,7 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:home_buddy_app/models/listing_model.dart';
 import 'package:home_buddy_app/models/listing_type.dart';
+import 'package:home_buddy_app/providers/provider.dart';
 import 'package:home_buddy_app/screens/details_screen.dart';
 
 final List<String> imgList = [
@@ -14,140 +13,116 @@ final List<String> imgList = [
 ];
 
 class Listings extends StatefulWidget {
-  Listings({Key? key}) : super(key: key);
+  const Listings({Key? key}) : super(key: key);
 
   @override
   _ListingsState createState() => _ListingsState();
 }
 
 class _ListingsState extends State<Listings> {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  List<QueryDocumentSnapshot<Listing>> listings = [];
-
-  //this is bad practice, it needs refactoring
-  //TODO: persist this data in the database
-  @override
-  void initState() {
-    super.initState();
-    final listingsRef = firestore.collection('listings').withConverter<Listing>(
-          fromFirestore: (snapshot, _) => Listing.fromJson(snapshot.data()!),
-          toFirestore: (listing, _) => listing.toJson(),
-        );
-
-    listingsRef.get().then((value) => value.docs).then((value) {
-      setState(() {
-        listings = value;
-      });
-    });
-  }
-
-  _getListings() async {
-    final listingsRef = firestore.collection('listings').withConverter<Listing>(
-          fromFirestore: (snapshot, _) => Listing.fromJson(snapshot.data()!),
-          toFirestore: (listing, _) => listing.toJson(),
-        );
-
-    listings = await listingsRef.get().then((value) => value.docs);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final listingsResult = ParentProvider.of(context)?.listings;
+
     return RefreshIndicator(
       onRefresh: () async {
-        await _getListings();
         setState(() {});
       },
-      child: ListView.builder(
-        itemCount: listings.length,
-        itemBuilder: (context, index) => ListTile(
-          title: Card(
-            elevation: 5,
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return Details(
-                        listing: listings[index].data(),
+      child: listingsResult != null
+          ? ListView.builder(
+              itemCount: listingsResult.length,
+              itemBuilder: (context, index) => ListTile(
+                title: Card(
+                  elevation: 5,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return Details(
+                              listing: listingsResult[index].data(),
+                            );
+                          },
+                        ),
                       );
                     },
-                  ),
-                );
-              },
-              child: Container(
-                width: double.infinity,
-                height: 160,
-                margin: const EdgeInsets.all(8),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.room_outlined,
-                              color: Colors.black45,
-                            ),
-                            Text(listings[index].data().title),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.apartment_outlined,
-                              color: Colors.black45,
-                            ),
-                            Text(listings[index]
-                                .data()
-                                .category
-                                .toShortString()),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Center(
-                      child: Container(
-                        margin: const EdgeInsets.all(8),
-                        width: double.infinity,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.network(
-                            imgList[0],
-                            fit: BoxFit.cover,
-                            width: 200,
-                            height: 100,
+                    child: Container(
+                      width: double.infinity,
+                      height: 160,
+                      margin: const EdgeInsets.all(8),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.room_outlined,
+                                    color: Colors.black45,
+                                  ),
+                                  Text(listingsResult[index].data().title),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.apartment_outlined,
+                                    color: Colors.black45,
+                                  ),
+                                  Text(listingsResult[index]
+                                      .data()
+                                      .category
+                                      .toShortString()),
+                                ],
+                              ),
+                            ],
                           ),
-                        ),
+                          Center(
+                            child: Container(
+                              margin: const EdgeInsets.all(8),
+                              width: double.infinity,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.network(
+                                  imgList[0],
+                                  fit: BoxFit.cover,
+                                  width: 200,
+                                  height: 100,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                      "\$${listingsResult[index].data().price}"),
+                                  const Text('/ night'),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${listingsResult[index].data().bedrooms} bed • ${listingsResult[index].data().bathrooms} bath',
+                                    style:
+                                        const TextStyle(color: Colors.black26),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text("\$${listings[index].data().price}"),
-                            const Text('/ night'),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '${listings[index].data().bedrooms} bed • ${listings[index].data().bathrooms} bath',
-                              style: const TextStyle(color: Colors.black26),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
-      ),
+            )
+          : const Text("No listings found"),
     );
   }
 }

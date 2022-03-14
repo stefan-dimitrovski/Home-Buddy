@@ -49,78 +49,117 @@ class _DetailsState extends State<Details> {
         child: Column(
           children: [
             Carousel(listing: widget.listing),
+            const Divider(),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(widget.listing.title),
+                    Card(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.97,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              child: Text(widget.listing.title),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              child: Text("\$${widget.listing.price} / night"),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Text("\$${widget.listing.price} / night"),
+                    Card(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.97,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.location_on),
+                                  SizedBox(width: 16),
+                                  Text('Address'),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(widget.listing.address.street),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(widget.listing.address.city),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(widget.listing.address.country),
+                            ),
+                            const Divider(),
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              child: Map(
+                                listing: widget.listing,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.location_on),
-                          SizedBox(width: 16),
-                          Text('Address'),
+                    Card(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.97,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.phone),
+                                  SizedBox(width: 16),
+                                  Text('Phone'),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(widget.listing.phone),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Card(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
+                              children: const [
+                                Icon(Icons.info),
+                                SizedBox(width: 16),
+                                Text('Details'),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.97,
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              widget.listing.description,
+                              textAlign: TextAlign.justify,
+                            ),
+                          ),
                         ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child: Text(widget.listing.address.street),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child: Text(widget.listing.address.city),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child: Text(widget.listing.address.country),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Map(
-                        listing: widget.listing,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.phone),
-                          SizedBox(width: 16),
-                          Text('Phone'),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child: Text(widget.listing.phone),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.info),
-                          SizedBox(width: 16),
-                          Text('Details'),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 1,
-                      padding: const EdgeInsets.all(10),
-                      child: Text(
-                        widget.listing.description,
-                        textAlign: TextAlign.justify,
                       ),
                     ),
                     Container(
