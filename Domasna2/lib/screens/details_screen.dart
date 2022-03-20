@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_buddy_app/models/listing_model.dart';
 import 'package:home_buddy_app/widgets/amenities_list.dart';
@@ -6,7 +8,9 @@ import 'package:home_buddy_app/widgets/map.dart';
 
 class Details extends StatefulWidget {
   Listing listing;
-  Details({Key? key, required this.listing}) : super(key: key);
+  String listingId;
+  Details({Key? key, required this.listing, required this.listingId})
+      : super(key: key);
 
   @override
   _DetailsState createState() => _DetailsState();
@@ -14,6 +18,21 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
   var isFavorite = false;
+  final userId = FirebaseAuth.instance.currentUser!.uid;
+  @override
+  void initState() {
+    var documentRef =
+        FirebaseFirestore.instance.collection('userData').doc(userId);
+    documentRef.get().then((DocumentSnapshot documentSnapshot) async {
+      if (documentSnapshot.exists) {
+        final favorite = await documentSnapshot.get('favorite') as List;
+        isFavorite = favorite.contains(widget.listingId);
+      }
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,21 +44,35 @@ class _DetailsState extends State<Details> {
                 ? const Icon(Icons.favorite_outline)
                 : const Icon(Icons.favorite),
             onPressed: () {
-              !isFavorite
-                  ? ScaffoldMessenger.of(context).showSnackBar(
+              var documentRef =
+                  FirebaseFirestore.instance.collection('userData').doc(userId);
+              documentRef.get().then((DocumentSnapshot documentSnapshot) async {
+                if (documentSnapshot.exists) {
+                  var favorite = await documentSnapshot.get('favorite') as List;
+
+                  if (!isFavorite) {
+                    ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         duration: Duration(seconds: 1),
                         content: Text('Added to favorites'),
                       ),
-                    )
-                  : ScaffoldMessenger.of(context).showSnackBar(
+                    );
+                    favorite.add(widget.listingId);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         duration: Duration(seconds: 1),
                         content: Text('Removed from favorites'),
                       ),
                     );
-              setState(() {
-                isFavorite = !isFavorite;
+                    favorite.remove(widget.listingId);
+                  }
+
+                  documentRef.update({'favorite': favorite});
+                  setState(() {
+                    isFavorite = !isFavorite;
+                  });
+                }
               });
             },
           ),

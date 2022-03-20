@@ -6,7 +6,8 @@ import 'package:home_buddy_app/screens/image_view_screen.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageSelect extends StatefulWidget {
-  const ImageSelect({Key? key}) : super(key: key);
+  final Function(List<XFile>) passData;
+  const ImageSelect({Key? key, required this.passData}) : super(key: key);
 
   @override
   _ImageSelectState createState() => _ImageSelectState();
@@ -33,6 +34,8 @@ class _ImageSelectState extends State<ImageSelect> {
         });
       } catch (e) {
         setState(() {});
+      } finally {
+        widget.passData(_imageFileList!);
       }
     } else {
       try {
@@ -41,10 +44,15 @@ class _ImageSelectState extends State<ImageSelect> {
           imageQuality: 75,
         );
         setState(() {
-          _imageFile = pickedFile;
+          // _imageFile = pickedFile;
+          if (pickedFile != null) {
+            _imageFileList!.add(pickedFile);
+          }
         });
       } catch (e) {
         setState(() {});
+      } finally {
+        widget.passData(_imageFileList!);
       }
     }
   }

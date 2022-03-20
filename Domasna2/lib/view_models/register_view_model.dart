@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -9,7 +10,16 @@ class RegisterViewModel extends ChangeNotifier {
 
     try {
       final userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((registeredUser) {
+        // Za avtomatski da dodade nov dokument vo userData po
+        // registriranje
+        final uid = registeredUser.user!.uid;
+        FirebaseFirestore.instance.collection('userData').doc(uid).set({
+          'favorite': [],
+          'userListings': [],
+        });
+      });
       isRegistered = userCredential != null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

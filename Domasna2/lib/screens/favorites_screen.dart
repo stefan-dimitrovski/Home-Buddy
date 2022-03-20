@@ -9,6 +9,13 @@ class FavoritesScreen extends StatefulWidget {
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('fav clicked');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return const Center(
       child: Text('Favorites'),

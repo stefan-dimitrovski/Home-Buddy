@@ -23,7 +23,6 @@ class _ListingsState extends State<Listings> {
   @override
   Widget build(BuildContext context) {
     final listingsResult = ParentProvider.of(context)?.listings;
-
     return RefreshIndicator(
       onRefresh: () async {
         setState(() {});
@@ -40,8 +39,10 @@ class _ListingsState extends State<Listings> {
                         context,
                         MaterialPageRoute(
                           builder: (context) {
+                            final item = listingsResult[index];
                             return Details(
-                              listing: listingsResult[index].data(),
+                              listing: item.data(),
+                              listingId: item.id,
                             );
                           },
                         ),

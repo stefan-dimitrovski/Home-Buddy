@@ -1,6 +1,9 @@
+// ignore_for_file: dead_code
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' hide Location;
 import 'package:home_buddy_app/models/address_model.dart';
@@ -8,6 +11,7 @@ import 'package:home_buddy_app/models/listing_model.dart';
 import 'package:home_buddy_app/models/listing_type.dart';
 import 'package:home_buddy_app/screens/image_picker_screen.dart';
 import 'package:home_buddy_app/widgets/amenities_list.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 
 class CreateListing extends StatefulWidget {
@@ -27,6 +31,11 @@ class _CreateListingState extends State<CreateListing> {
   int _categorySelected = -1;
   int _bedrooms = 0;
   int _bathrooms = 0;
+  List<XFile>? _imageFileList;
+
+  void _passData(List<XFile> images) {
+    _imageFileList = images;
+  }
 
   final Location _location = Location();
   late List<Placemark> _placemark;
@@ -42,16 +51,29 @@ class _CreateListingState extends State<CreateListing> {
     super.initState();
   }
 
+  // ignore: dead_code
   _createListing() async {
     //Refactor firebase with singleton
-    //TODO: Finish image storage and fix amenities
+    //TODO: Fix amenities
+    var imgURLs = <String>[];
+    final firebaseStorageRef = FirebaseStorage.instance.ref();
+    await Future.forEach(_imageFileList!, (XFile element) async {
+      String fileName = element.name;
+      UploadTask uploadTask = firebaseStorageRef
+          .child('uploads/$fileName')
+          .putFile(File(element.path));
 
+      var imageUrl = await (await uploadTask).ref.getDownloadURL();
+      imgURLs.add(imageUrl.toString());
+    });
+
+    final userId = FirebaseAuth.instance.currentUser!.uid;
     final listingsRef = firestore.collection('listings').withConverter<Listing>(
           fromFirestore: (snapshot, _) => Listing.fromJson(snapshot.data()!),
           toFirestore: (listing, _) => listing.toJson(),
         );
 
-    await listingsRef.add(Listing(
+    var documentRef = await listingsRef.add(Listing(
       title: myTitleController.text,
       phone: myPhoneController.text,
       description: myDescriptionController.text,
@@ -59,7 +81,7 @@ class _CreateListingState extends State<CreateListing> {
       category: ListingType.values[_categorySelected],
       bedrooms: _bedrooms,
       bathrooms: _bathrooms,
-      images: [],
+      images: imgURLs,
       address: Address(
         street: _placemark[0].street!,
         city: _placemark[0].locality!,
@@ -71,18 +93,9 @@ class _CreateListingState extends State<CreateListing> {
       owner: auth.currentUser!.uid,
     ));
 
-    // .then((doc) => {
-    //       //upload images
-    //       storage.ref().child('listings/${doc.id}').listAll().then((list) {
-    //         for (var i = 0; i < list.items.length; i++) {
-    //           list.items[i].getDownloadURL().then((url) {
-    //             firestore.collection('listings').doc(doc.id).update({
-    //               'images': FieldValue.arrayUnion([url]),
-    //             });
-    //           });
-    //         }
-    //       }),
-    //     });
+    FirebaseFirestore.instance.collection('userData').doc(userId).update({
+      'userListings': FieldValue.arrayUnion([documentRef.id])
+    });
 
     Navigator.pop(context);
   }
@@ -433,7 +446,9 @@ class _CreateListingState extends State<CreateListing> {
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                child: const ImageSelect(),
+                child: ImageSelect(
+                  passData: _passData,
+                ),
               ),
             ],
           ),
