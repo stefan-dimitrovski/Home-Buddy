@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_buddy_app/models/listing_model.dart';
 import 'package:home_buddy_app/models/listing_type.dart';
+import 'package:home_buddy_app/providers/firebase.dart';
 import 'package:home_buddy_app/widgets/listings.dart';
 
 import 'details_screen.dart';
@@ -148,15 +149,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   void getFavoriteListings() {
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    // List<QueryDocumentSnapshot<Listing>>? items;
-    FirebaseFirestore.instance
-        .collection("userData")
-        .doc(uid)
-        .get()
-        .then((docSnapshot) async {
+    FirebaseFirestore firestore = FirestoreInstance.instance!;
+
+    firestore.collection("userData").doc(uid).get().then((docSnapshot) async {
       final favoriteIds = List<String>.from(docSnapshot.data()!["favorite"]);
 
-      await FirebaseFirestore.instance
+      await firestore
           .collection("listings")
           .where(FieldPath.documentId, whereIn: favoriteIds)
           .withConverter<Listing>(

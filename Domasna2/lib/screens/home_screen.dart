@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_buddy_app/models/listing_model.dart';
+import 'package:home_buddy_app/providers/firebase.dart';
 import 'package:home_buddy_app/providers/provider.dart';
 import 'package:home_buddy_app/screens/create_listing_screen.dart';
 import 'package:home_buddy_app/screens/explore_screen.dart';
@@ -21,7 +22,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  static final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  static final FirebaseFirestore firestore = FirestoreInstance.instance!;
   static final listingsRef =
       firestore.collection('listings').withConverter<Listing>(
             fromFirestore: (snapshot, _) => Listing.fromJson(snapshot.data()!),
