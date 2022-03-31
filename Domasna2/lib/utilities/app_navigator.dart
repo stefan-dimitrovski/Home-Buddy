@@ -38,7 +38,7 @@ class AppNavigator {
       context,
       MaterialPageRoute(
         builder: (context) => HomePage(
-          title: 'Home',
+          title: 'Explore',
         ),
       ),
     );

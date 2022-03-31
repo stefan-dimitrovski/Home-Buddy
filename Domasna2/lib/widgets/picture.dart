@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_buddy_app/screens/image_picker_screen.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Picture extends StatefulWidget {
   const Picture({Key? key}) : super(key: key);
@@ -16,7 +17,9 @@ class _PictureState extends State<Picture> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const ImageSelect(),
+            builder: (context) => ImageSelect(
+              passData: (List<XFile> noop) {},
+            ),
           ),
         );
       },

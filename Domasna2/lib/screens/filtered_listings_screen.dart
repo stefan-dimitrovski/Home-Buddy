@@ -3,29 +3,47 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_buddy_app/models/listing_model.dart';
 import 'package:home_buddy_app/models/listing_type.dart';
-import 'package:home_buddy_app/providers/firebase.dart';
-import 'package:home_buddy_app/widgets/listings.dart';
 
 import 'details_screen.dart';
 
-class FavoritesScreen extends StatefulWidget {
-  const FavoritesScreen({Key? key}) : super(key: key);
+class FilteredListingScreen extends StatelessWidget {
+  Map<String, int> items;
+  FilteredListingScreen({Key? key, required this.items}) : super(key: key);
 
   @override
-  _FavoritesScreenState createState() => _FavoritesScreenState();
+  Widget build(BuildContext context) {
+    print(items);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Search result:'),
+      ),
+      body: Center(
+          child: ShowSearchResult(
+        items: items,
+      )),
+    );
+  }
 }
 
-class _FavoritesScreenState extends State<FavoritesScreen> {
+class ShowSearchResult extends StatefulWidget {
+  Map<String, int> items;
+  ShowSearchResult({Key? key, required this.items}) : super(key: key);
+
+  @override
+  State<ShowSearchResult> createState() => _ShowSearchResultState();
+}
+
+class _ShowSearchResultState extends State<ShowSearchResult> {
   final ValueNotifier<List<QueryDocumentSnapshot<Listing>>> listingsResult =
       ValueNotifier([]);
 
   @override
   Widget build(BuildContext context) {
-    getFavoriteListings();
+    filterItems(widget.items);
     return RefreshIndicator(
       onRefresh: () async {
         setState(() {
-          getFavoriteListings();
+          filterItems(widget.items);
         });
       },
       child: ValueListenableBuilder<List<QueryDocumentSnapshot<Listing>>?>(
@@ -94,8 +112,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
                                     child: Image.network(
-                                      // imgList[0],
-                                      // 'https://media.cntraveler.com/photos/5d112d50c4d7bd806dbc00a4/3:2/w_2250,h_1500,c_limit/airbnb%20luxe.jpg',
                                       listingsResult.value[index]
                                               .data()
                                               .images
@@ -147,24 +163,31 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     );
   }
 
-  void getFavoriteListings() {
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseFirestore firestore = FirestoreInstance.instance!;
-
-    firestore.collection("userData").doc(uid).get().then((docSnapshot) async {
-      final favoriteIds = List<String>.from(docSnapshot.data()!["favorite"]);
-
-      await firestore
-          .collection("listings")
-          .where(FieldPath.documentId, whereIn: favoriteIds)
-          .withConverter<Listing>(
-            fromFirestore: (snapshot, _) => Listing.fromJson(snapshot.data()!),
-            toFirestore: (listing, _) => listing.toJson(),
-          )
-          .get()
-          .then((value) {
-        listingsResult.value = value.docs;
+  void filterItems(Map<String, int> items) {
+    print(items);
+    print(items['bedrooms']);
+    FirebaseFirestore.instance
+        .collection("listings")
+        .where("category",
+            isEqualTo:
+                items['categorySelected'] != -1 ? items['categorySelected'] : 0)
+        .withConverter<Listing>(
+          fromFirestore: (snapshot, _) => Listing.fromJson(snapshot.data()!),
+          toFirestore: (listing, _) => listing.toJson(),
+        )
+        .get()
+        .then((value) {
+      List<QueryDocumentSnapshot<Listing>> temp = [];
+      value.docs.forEach((element) {
+        final data = element.data();
+        if (data.bathrooms >= items["bathrooms"]! &&
+            data.bedrooms >= items["bedrooms"]! &&
+            data.price >= items["priceSelected"]!) {
+          temp.add(element);
+        }
       });
+
+      listingsResult.value = temp;
     });
   }
 }

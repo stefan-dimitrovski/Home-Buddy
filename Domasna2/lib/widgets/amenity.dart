@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class Amenity extends StatefulWidget {
   final String title;
   final IconData icon;
+  final Function(String type, bool add) callback;
 
-  const Amenity({Key? key, required this.icon, required this.title})
+  const Amenity(
+      {Key? key,
+      required this.icon,
+      required this.title,
+      required this.callback})
       : super(key: key);
 
   @override
@@ -19,6 +24,7 @@ class _AmenityState extends State<Amenity> {
       onTap: () {
         setState(() {
           isSelected = !isSelected;
+          widget.callback(widget.title, isSelected);
         });
         // print('Tapped ${widget.title}');
       },

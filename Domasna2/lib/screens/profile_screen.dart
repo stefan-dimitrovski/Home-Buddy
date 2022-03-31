@@ -3,29 +3,48 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_buddy_app/models/listing_model.dart';
 import 'package:home_buddy_app/models/listing_type.dart';
-import 'package:home_buddy_app/providers/firebase.dart';
-import 'package:home_buddy_app/widgets/listings.dart';
 
 import 'details_screen.dart';
 
-class FavoritesScreen extends StatefulWidget {
-  const FavoritesScreen({Key? key}) : super(key: key);
+class Profile extends StatefulWidget {
+  Profile({Key? key}) : super(key: key);
 
   @override
-  _FavoritesScreenState createState() => _FavoritesScreenState();
+  _ProfileState createState() => _ProfileState();
 }
 
-class _FavoritesScreenState extends State<FavoritesScreen> {
+class _ProfileState extends State<Profile> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile'),
+      ),
+      body: const Center(
+        child: ProfileData(),
+      ),
+    );
+  }
+}
+
+class ProfileData extends StatefulWidget {
+  const ProfileData({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileData> createState() => _ProfileDataState();
+}
+
+class _ProfileDataState extends State<ProfileData> {
   final ValueNotifier<List<QueryDocumentSnapshot<Listing>>> listingsResult =
       ValueNotifier([]);
 
   @override
   Widget build(BuildContext context) {
-    getFavoriteListings();
+    getUserListings();
     return RefreshIndicator(
       onRefresh: () async {
         setState(() {
-          getFavoriteListings();
+          getUserListings();
         });
       },
       child: ValueListenableBuilder<List<QueryDocumentSnapshot<Listing>>?>(
@@ -94,8 +113,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
                                     child: Image.network(
-                                      // imgList[0],
-                                      // 'https://media.cntraveler.com/photos/5d112d50c4d7bd806dbc00a4/3:2/w_2250,h_1500,c_limit/airbnb%20luxe.jpg',
                                       listingsResult.value[index]
                                               .data()
                                               .images
@@ -147,16 +164,20 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     );
   }
 
-  void getFavoriteListings() {
+  void getUserListings() {
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseFirestore firestore = FirestoreInstance.instance!;
+    // List<QueryDocumentSnapshot<Listing>>? items;
+    FirebaseFirestore.instance
+        .collection("userData")
+        .doc(uid)
+        .get()
+        .then((docSnapshot) async {
+      final userListsIds =
+          List<String>.from(docSnapshot.data()!["userListings"]);
 
-    firestore.collection("userData").doc(uid).get().then((docSnapshot) async {
-      final favoriteIds = List<String>.from(docSnapshot.data()!["favorite"]);
-
-      await firestore
+      await FirebaseFirestore.instance
           .collection("listings")
-          .where(FieldPath.documentId, whereIn: favoriteIds)
+          .where(FieldPath.documentId, whereIn: userListsIds)
           .withConverter<Listing>(
             fromFirestore: (snapshot, _) => Listing.fromJson(snapshot.data()!),
             toFirestore: (listing, _) => listing.toJson(),
