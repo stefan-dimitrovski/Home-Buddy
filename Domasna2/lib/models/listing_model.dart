@@ -11,7 +11,6 @@ class Listing {
   ListingType category;
   int bedrooms;
   int bathrooms;
-  // List<Amenity> amenities = Amenity.amenities;
   List<dynamic> images;
   String owner;
   List<dynamic> amenities;
