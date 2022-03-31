@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       ),
       // home: Startup(),
       home: HomePage(
-        title: 'Home',
+        title: 'Explore',
       ),
     );
   }

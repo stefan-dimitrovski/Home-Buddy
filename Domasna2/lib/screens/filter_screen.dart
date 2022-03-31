@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_buddy_app/screens/filtered_listings_screen.dart';
 
 class Filter extends StatefulWidget {
   final ValueChanged<String> parentAction;
@@ -200,19 +201,29 @@ class _FilterState extends State<Filter> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    widget.parentAction(
-                      '$_categorySelected ${_priceSelected.round()} $_bedrooms $_bathrooms',
-                    );
+                    // widget.parentAction(
+                    //   '$_categorySelected ${_priceSelected.round()} $_bedrooms $_bathrooms',
+                    // );
 
-                    Navigator.pop(
-                      context,
-                      {
-                        'categorySelected': _categorySelected,
-                        'priceSelected': _priceSelected,
-                        'bedrooms': _bedrooms,
-                        'bathrooms': _bathrooms,
-                      },
-                    );
+                    // Navigator.pop(
+                    //   context,
+                    // {
+                    //   'categorySelected': _categorySelected,
+                    //   'priceSelected': _priceSelected,
+                    //   'bedrooms': _bedrooms,
+                    //   'bathrooms': _bathrooms,
+                    // }
+                    // );
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FilteredListingScreen(items: {
+                                  'categorySelected': _categorySelected,
+                                  'priceSelected': _priceSelected.round(),
+                                  'bedrooms': _bedrooms,
+                                  'bathrooms': _bathrooms,
+                                })));
                   },
                   child: const Text(
                     'Submit',

@@ -87,7 +87,14 @@ class _ListingsState extends State<Listings> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
                                 child: Image.network(
-                                  imgList[0],
+                                  // imgList[0],
+                                  listingsResult[index].data().images.isNotEmpty
+                                      ? listingsResult[index]
+                                          .data()
+                                          .images[0]
+                                          .toString()
+                                      : 'https://media.cntraveler.com/photos/5d112d50c4d7bd806dbc00a4/3:2/w_2250,h_1500,c_limit/airbnb%20luxe.jpg',
+
                                   fit: BoxFit.cover,
                                   width: 200,
                                   height: 100,

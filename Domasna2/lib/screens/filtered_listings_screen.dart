@@ -6,45 +6,44 @@ import 'package:home_buddy_app/models/listing_type.dart';
 
 import 'details_screen.dart';
 
-class Profile extends StatefulWidget {
-  Profile({Key? key}) : super(key: key);
+class FilteredListingScreen extends StatelessWidget {
+  Map<String, int> items;
+  FilteredListingScreen({Key? key, required this.items}) : super(key: key);
 
-  @override
-  _ProfileState createState() => _ProfileState();
-}
-
-class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    print(items);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text('Search result:'),
       ),
-      body: const Center(
-        child: ProfileData(),
-      ),
+      body: Center(
+          child: ShowSearchResult(
+        items: items,
+      )),
     );
   }
 }
 
-class ProfileData extends StatefulWidget {
-  const ProfileData({Key? key}) : super(key: key);
+class ShowSearchResult extends StatefulWidget {
+  Map<String, int> items;
+  ShowSearchResult({Key? key, required this.items}) : super(key: key);
 
   @override
-  State<ProfileData> createState() => _ProfileDataState();
+  State<ShowSearchResult> createState() => _ShowSearchResultState();
 }
 
-class _ProfileDataState extends State<ProfileData> {
+class _ShowSearchResultState extends State<ShowSearchResult> {
   final ValueNotifier<List<QueryDocumentSnapshot<Listing>>> listingsResult =
       ValueNotifier([]);
 
   @override
   Widget build(BuildContext context) {
-    getUserListings();
+    filterItems(widget.items);
     return RefreshIndicator(
       onRefresh: () async {
         setState(() {
-          getUserListings();
+          filterItems(widget.items);
         });
       },
       child: ValueListenableBuilder<List<QueryDocumentSnapshot<Listing>>?>(
@@ -164,28 +163,31 @@ class _ProfileDataState extends State<ProfileData> {
     );
   }
 
-  void getUserListings() {
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-    // List<QueryDocumentSnapshot<Listing>>? items;
+  void filterItems(Map<String, int> items) {
+    print(items);
+    print(items['bedrooms']);
     FirebaseFirestore.instance
-        .collection("userData")
-        .doc(uid)
+        .collection("listings")
+        .where("category",
+            isEqualTo:
+                items['categorySelected'] != -1 ? items['categorySelected'] : 0)
+        .withConverter<Listing>(
+          fromFirestore: (snapshot, _) => Listing.fromJson(snapshot.data()!),
+          toFirestore: (listing, _) => listing.toJson(),
+        )
         .get()
-        .then((docSnapshot) async {
-      final userListsIds =
-          List<String>.from(docSnapshot.data()!["userListings"]);
-
-      await FirebaseFirestore.instance
-          .collection("listings")
-          .where(FieldPath.documentId, whereIn: userListsIds)
-          .withConverter<Listing>(
-            fromFirestore: (snapshot, _) => Listing.fromJson(snapshot.data()!),
-            toFirestore: (listing, _) => listing.toJson(),
-          )
-          .get()
-          .then((value) {
-        listingsResult.value = value.docs;
+        .then((value) {
+      List<QueryDocumentSnapshot<Listing>> temp = [];
+      value.docs.forEach((element) {
+        final data = element.data();
+        if (data.bathrooms >= items["bathrooms"]! &&
+            data.bedrooms >= items["bedrooms"]! &&
+            data.price >= items["priceSelected"]!) {
+          temp.add(element);
+        }
       });
+
+      listingsResult.value = temp;
     });
   }
 }

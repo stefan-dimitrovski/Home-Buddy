@@ -39,11 +39,11 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = index;
       if (_selectedIndex == 1) {
-        widget.title = "Explore";
+        widget.title = "Favorite";
       } else if (_selectedIndex == 2) {
         widget.title = "Favorite";
       } else {
-        widget.title = "Home";
+        widget.title = "Explore";
       }
     });
   }
