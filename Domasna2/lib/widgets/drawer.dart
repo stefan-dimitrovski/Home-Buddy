@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:home_buddy_app/screens/profile_screen.dart';
 
@@ -9,13 +11,13 @@ class DrawerApp extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.zero,
       children: <Widget>[
-        const DrawerHeader(
-          decoration: BoxDecoration(
+        DrawerHeader(
+          decoration: const BoxDecoration(
             color: Colors.blue,
           ),
           child: Text(
-            'Drawer Header',
-            style: TextStyle(
+            FirebaseAuth.instance.currentUser!.email.toString(),
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 24,
             ),

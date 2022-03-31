@@ -31,7 +31,6 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _widgetOptions = <Widget>[
     const Listings(),
-    const ExploreScreen(),
     const FavoritesScreen(),
   ];
 
@@ -130,10 +129,6 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_rounded),
-            label: 'Home',
-          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.explore_outlined),
             label: 'Explore',
