@@ -1,5 +1,5 @@
 import 'package:home_buddy_app/models/address_model.dart';
-import 'package:home_buddy_app/models/amenity_model.dart';
+// import 'package:home_buddy_app/models/amenity_model.dart';
 import 'package:home_buddy_app/models/listing_type.dart';
 
 class Listing {
@@ -11,9 +11,10 @@ class Listing {
   ListingType category;
   int bedrooms;
   int bathrooms;
-  List<Amenity> amenities = Amenity.amenities;
+  // List<Amenity> amenities = Amenity.amenities;
   List<dynamic> images;
   String owner;
+  List<dynamic> amenities;
 
   Listing({
     required this.title,
@@ -26,6 +27,7 @@ class Listing {
     required this.bedrooms,
     required this.bathrooms,
     required this.owner,
+    required this.amenities,
   });
 
   String get getTitle => title;
@@ -38,6 +40,7 @@ class Listing {
   int get getBathrooms => bathrooms;
   List<dynamic> get getImages => images;
   String get getOwner => owner;
+  List<dynamic> get getAmenities => amenities;
 
   Listing.fromJson(Map<String, dynamic> json)
       : title = json['title'],
@@ -49,7 +52,8 @@ class Listing {
         category = ListingType.values[json['category']],
         bedrooms = json['bedrooms'],
         bathrooms = json['bathrooms'],
-        owner = json['owner'];
+        owner = json['owner'],
+        amenities = json['amenities'];
 
   Map<String, dynamic> toJson() => {
         'title': title,
@@ -62,6 +66,7 @@ class Listing {
         'bedrooms': bedrooms,
         'bathrooms': bathrooms,
         'owner': owner,
+        'amenities': amenities,
       };
 
   @override

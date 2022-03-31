@@ -32,9 +32,20 @@ class _CreateListingState extends State<CreateListing> {
   int _bedrooms = 0;
   int _bathrooms = 0;
   List<XFile>? _imageFileList;
+  List<String> _amenityList = [];
 
   void _passData(List<XFile> images) {
     _imageFileList = images;
+  }
+
+  void _passAmenity(String amenityType, bool add) {
+    // Ako "add" e true dodadi, ako e false izbrishi od listata
+    if (add) {
+      _amenityList.add(amenityType);
+    } else {
+      _amenityList.remove(amenityType);
+    }
+    print(_amenityList);
   }
 
   final Location _location = Location();
@@ -91,6 +102,7 @@ class _CreateListingState extends State<CreateListing> {
         zipcode: _placemark[0].postalCode!,
       ),
       owner: auth.currentUser!.uid,
+      amenities: _amenityList,
     ));
 
     FirebaseFirestore.instance.collection('userData').doc(userId).update({
@@ -398,7 +410,9 @@ class _CreateListingState extends State<CreateListing> {
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                 height: 100,
-                child: const AmenitiesList(),
+                child: AmenitiesList(
+                  passAmenityToParentCallback: _passAmenity,
+                ),
               ),
               //PRICE
               Container(

@@ -209,10 +209,14 @@ class _DetailsState extends State<Details> {
                 ),
               ],
             ),
-            const SizedBox(
+            SizedBox(
               height: 100,
               width: double.infinity,
-              child: AmenitiesList(),
+              child: AmenitiesList(
+                passAmenityToParentCallback: (type, add) {
+                  // noop
+                },
+              ),
             ),
           ],
         ),
