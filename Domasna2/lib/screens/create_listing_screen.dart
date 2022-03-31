@@ -84,26 +84,28 @@ class _CreateListingState extends State<CreateListing> {
           toFirestore: (listing, _) => listing.toJson(),
         );
 
-    var documentRef = await listingsRef.add(Listing(
-      title: myTitleController.text,
-      phone: myPhoneController.text,
-      description: myDescriptionController.text,
-      price: double.parse(myPriceController.text),
-      category: ListingType.values[_categorySelected],
-      bedrooms: _bedrooms,
-      bathrooms: _bathrooms,
-      images: imgURLs,
-      address: Address(
-        street: _placemark[0].street!,
-        city: _placemark[0].locality!,
-        lat: _locationData.latitude!,
-        lng: _locationData.longitude!,
-        country: _placemark[0].country!,
-        zipcode: _placemark[0].postalCode!,
-      ),
-      owner: auth.currentUser!.uid,
-      amenities: _amenityList,
-    ));
+    Listing listing = (ListingBuilder()
+          ..setTitle(myTitleController.text)
+          ..setPhone(myPhoneController.text)
+          ..setDescription(myDescriptionController.text)
+          ..setPrice(double.parse(myPriceController.text))
+          ..setCategory(ListingType.values[_categorySelected])
+          ..setBedrooms(_bedrooms)
+          ..setBathrooms(_bathrooms)
+          ..setAmenities(_amenityList)
+          ..setImages(imgURLs)
+          ..setOwner(userId)
+          ..setAddress(Address(
+            street: _placemark[0].street!,
+            city: _placemark[0].locality!,
+            lat: _locationData.latitude!,
+            lng: _locationData.longitude!,
+            country: _placemark[0].country!,
+            zipcode: _placemark[0].postalCode!,
+          )))
+        .build();
+
+    var documentRef = await listingsRef.add(listing);
 
     FirebaseFirestore.instance.collection('userData').doc(userId).update({
       'userListings': FieldValue.arrayUnion([documentRef.id])

@@ -73,4 +73,79 @@ class Listing {
   String toString() {
     return 'Listing{title: $title, phone: $phone, address: $address, description: $description, price: $price, images: $images, category: $category, bedrooms: $bedrooms, bathrooms: $bathrooms, owner: $owner}';
   }
+
+  Listing._builder(ListingBuilder builder)
+      : title = builder.title,
+        phone = builder.phone,
+        address = builder.address,
+        description = builder.description,
+        price = builder.price,
+        images = builder.images,
+        category = builder.category,
+        bedrooms = builder.bedrooms,
+        bathrooms = builder.bathrooms,
+        owner = builder.owner,
+        amenities = builder.amenities;
+}
+
+class ListingBuilder {
+  late String title;
+  late String phone;
+  late Address address;
+  late String description;
+  late double price;
+  late List<dynamic> images;
+  late ListingType category;
+  late int bedrooms;
+  late int bathrooms;
+  late String owner;
+  late List<dynamic> amenities;
+
+  void setTitle(String title) {
+    this.title = title;
+  }
+
+  void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  void setAddress(Address address) {
+    this.address = address;
+  }
+
+  void setDescription(String description) {
+    this.description = description;
+  }
+
+  void setPrice(double price) {
+    this.price = price;
+  }
+
+  void setImages(List<dynamic> images) {
+    this.images = images;
+  }
+
+  void setCategory(ListingType category) {
+    this.category = category;
+  }
+
+  void setBedrooms(int bedrooms) {
+    this.bedrooms = bedrooms;
+  }
+
+  void setBathrooms(int bathrooms) {
+    this.bathrooms = bathrooms;
+  }
+
+  void setOwner(String owner) {
+    this.owner = owner;
+  }
+
+  void setAmenities(List<dynamic> amenities) {
+    this.amenities = amenities;
+  }
+
+  Listing build() {
+    return Listing._builder(this);
+  }
 }
